@@ -6,6 +6,7 @@ https://github.com/soinkleined/busstop
 import logging
 import threading
 import time
+from dataclasses import dataclass
 from flask import Flask, jsonify, make_response, redirect, request, render_template, url_for
 from turbo_flask import Turbo
 from tfl_bus_monitor.tfl_bus_monitor import TFLBusMonitor, get_config_path
@@ -21,9 +22,22 @@ latest_data = {
     "all_stops": [],
 }
 
-# Track the unique client IDs that have reached the server
+
+@dataclass
+class ClientInfo:
+    first_seen: float
+    last_seen: float
+    request_count: int = 0
+
+    def touch(self):
+        self.request_count += 1
+        self.last_seen = time.time()
+
+
+# Track the unique client IDs along with per-client metadata
 client_ids_seen = []
-client_ids_lock = threading.Lock()
+client_data = {}
+client_data_lock = threading.Lock()
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
@@ -68,9 +82,14 @@ def track_client_id():
     if not client_id:
         return
 
-    with client_ids_lock:
-        if client_id not in client_ids_seen:
+    with client_data_lock:
+        info = client_data.get(client_id)
+        if info is None:
+            now = time.time()
+            info = ClientInfo(first_seen=now, last_seen=now)
+            client_data[client_id] = info
             client_ids_seen.append(client_id)
+        info.touch()
 
 
 @app.route("/")
