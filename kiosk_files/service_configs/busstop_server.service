@@ -3,10 +3,11 @@ Description=busstop server
 After=network.target
 
 [Service]
-User=pi
-Group=pi
-WorkingDirectory=/home/pi/busstop/flask_app
-ExecStart=/home/pi/busstop/flask_app/venv/bin/gunicorn --bind localhost:8000 --workers 1 --threads 5 --log-level=debug main:app
+User=imiell
+Group=imiell
+WorkingDirectory=/home/imiell/git/busstop/flask_app
+Environment=BUSSTOP_HOME=/home/imiell/git/busstop
+ExecStart=/home/imiell/git/busstop/flask_app/venv/bin/gunicorn --bind localhost:6751 --workers 1 --threads 5 --log-level=debug main:app
 Restart=always
 
 [Install]
