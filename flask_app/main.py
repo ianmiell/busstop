@@ -21,6 +21,10 @@ latest_data = {
     "all_stops": [],
 }
 
+# Track the unique client IDs that have reached the server
+client_ids_seen = []
+client_ids_lock = threading.Lock()
+
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
@@ -55,6 +59,18 @@ def inject_all_stops():
         "all_stops": latest_data.get("all_stops", []),
         "user_location": request.cookies.get("user_location"),
     }
+
+
+@app.before_request
+def track_client_id():
+    """Keep a record of each unique client_id cookie seen by the server."""
+    client_id = request.cookies.get("client_id")
+    if not client_id:
+        return
+
+    with client_ids_lock:
+        if client_id not in client_ids_seen:
+            client_ids_seen.append(client_id)
 
 
 @app.route("/")
