@@ -6,7 +6,7 @@ https://github.com/soinkleined/busstop
 import logging
 import threading
 import time
-from flask import Flask, redirect, request, render_template, url_for
+from flask import Flask, jsonify, make_response, redirect, request, render_template, url_for
 from turbo_flask import Turbo
 from tfl_bus_monitor.tfl_bus_monitor import TFLBusMonitor, get_config_path
 
@@ -53,12 +53,38 @@ def inject_all_stops():
     """Make stop data available in all templates."""
     return {
         "all_stops": latest_data.get("all_stops", []),
+        "user_location": request.cookies.get("user_location"),
     }
 
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/api/location", methods=["POST"])
+def set_location_cookie():
+    """Persist user's geolocation (if provided) as a cookie."""
+    data = request.get_json(silent=True) or {}
+    lat = data.get("lat")
+    lon = data.get("lon")
+
+    try:
+        lat = float(lat)
+        lon = float(lon)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid latitude/longitude"}), 400
+
+    response = jsonify({"status": "ok"})
+    location_value = f"{lat:.6f},{lon:.6f}"
+    # Refresh cookie every 10 minutes so stale locations expire quickly.
+    response.set_cookie(
+        "user_location",
+        location_value,
+        max_age=60 * 10,
+        samesite="Lax",
+    )
+    return response
 
 
 @app.route("/admin", methods=["GET", "POST"])
@@ -104,4 +130,3 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
 else:
     app.logger.info("busstop started")
-

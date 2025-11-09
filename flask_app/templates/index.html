@@ -26,15 +26,16 @@
 <!-- /favicons -->
 
 <!-- scripts -->
-     <script src="{{ url_for('static', filename='js/date_and_time.js') }}"></script>
+     <script src="{{ url_for('static', filename='js/client_id.js') }}" defer></script>
+     <script src="{{ url_for('static', filename='js/location.js') }}" defer></script>
+     <script src="{{ url_for('static', filename='js/auto_refresh.js') }}" defer></script>
      {{ turbo() }}
 <!-- /scripts -->
 
     <title>busstop</title>
 </head>
-<body onload="displayDateAndTime()">
+<body>
         <div id="container">
-            <span id="date_and_time"></span></br>
         {% block content %}
         {% include "busstop.html" %}
         {% endblock %}
