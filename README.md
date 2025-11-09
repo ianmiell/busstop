@@ -19,7 +19,7 @@ Clone the repo:
     git clone https://github.com/soinkleined/busstop.git
     cd busstop
 
-Using the TFL API, find the corresponding StopPoint(s) and add it/them to the ~/busstop_config.ini file.  You can also configure the number of bussess to display per stop. By default, a config file will be installed in the config directory of the tfl_bus_monitor package.
+Using the TFL API, find the corresponding StopPoint(s) and add it/them to the `~/busstop_config.ini file`.  You can also configure the number of bussess to display per stop. By default, a config file will be installed in the config directory of the tfl_bus_monitor package.
 
 Individual stopids can be found by looking for the arrivals at the stop via the TFL website.  For example:
 
@@ -31,14 +31,14 @@ The column where the stopid is located is "Naptan_Atco" and you might want to va
 
 http://tfl.gov.uk/tfl/syndication/feeds/bus-stops.csv
 
-Here is an example configuration.  Use comma-separated stopids and values for the number of busses you'd like to display for each stop.  "0" will display all available busses.  Keep in mind your screen size and adjust appropriately. 
+Here is an example configuration.  Use comma-separated stopids and values for the number of busses you'd like to display for each stop.  "0" will display all available busses.  Keep in mind your screen size and adjust appropriately.
 
     [busstop]
     #Clissold Crescent, Newington Green
     stopid = 490005432S2,490015396S
     num_services=10,10
 
-Install a python virtual environment and all requisite packages: 
+Install a python virtual environment and all requisite packages:
 
     cd flask_app
     python -m venv venv
@@ -71,7 +71,7 @@ Links to the hardware:
 ![hardware](readme_images/hardware.jpeg)
 
 ## Acknowledgements
-Balena.io is a very interesting platform for IoT fleet management.  I saw their blog post about creating a live train time sign under your monitor and was inspired to do something similar for busses. There are a lot of links to other resources from the post as well as many other project ideas. 
+Balena.io is a very interesting platform for IoT fleet management.  I saw their blog post about creating a live train time sign under your monitor and was inspired to do something similar for busses. There are a lot of links to other resources from the post as well as many other project ideas.
 
 https://www.balena.io/blog/build-a-raspberry-pi-powered-train-station-oled-sign-for-your-desk/
 
