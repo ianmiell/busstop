@@ -38,6 +38,9 @@ Here is an example configuration.  Use comma-separated stopids and values for th
     stopid = 490005432S2,490015396S
     num_services=10,10
 
+## Profiles
+Profiles let you choose different sets of stops, e.g. "Ian home" or "Ian work". Manage them in the browser at `/profiles` (add, edit, delete); choose one with the drop-down shown on the main page when more than one exists. Each client remembers its choice in a cookie. Profiles are stored in `busstop_profiles.json` next to `busstop_config.ini`; on first run a profile called "Ian home" is created from the stops in the ini file.
+
 Install a python virtual environment and all requisite packages:
 
     cd flask_app

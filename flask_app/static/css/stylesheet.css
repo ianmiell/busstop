@@ -116,3 +116,6 @@ a {
   text-align: right;
 }
 
+
+#profile-picker { margin: 4px; }
+#profile-error { color: red; }
